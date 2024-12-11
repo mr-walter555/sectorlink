@@ -42,8 +42,30 @@ try {
 </head>
 
 <body>
-    <div class="dashboard-container">
-        <div class="sidebar">
+    <!-- Add this navbar section at the top of each admin page (after <body>) -->
+<nav class="dashboard-nav">
+    <div class="nav-container">
+        <div class="nav-brand">
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+        </div>
+
+        <div class="nav-actions">
+            <div class="nav-icons">
+                <div class="notification-icon">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="user-icon">
+                    <i class="fas fa-user-circle"></i>
+                    <span><?php echo htmlspecialchars($_SESSION['admin_username']); ?></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="sidebar">
             <h2><i class="fas fa-user-shield"></i> Admin Panel</h2>
             <ul class="sidebar-menu">
                 <li>
@@ -68,6 +90,12 @@ try {
                     <a href="applications.php">
                         <i class="fas fa-file-alt"></i>
                         <span>Applications</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="change_password.php" class="active">
+                        <i class="fas fa-key"></i>
+                        <span>Change Password</span>
                     </a>
                 </li>
                 <li>
@@ -265,6 +293,26 @@ try {
         unset($_SESSION['swal_message']);
     endif;
     ?>
+    <!-- Add this script section at the bottom of each admin page (before </body>) -->
+<script>
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+    const dashboardNav = document.querySelector('.dashboard-nav');
+    
+    sidebar.classList.toggle('active');
+}
+
+// Close sidebar when clicking outside
+document.addEventListener('click', function(event) {
+    const sidebar = document.querySelector('.sidebar');
+    const toggle = document.querySelector('.sidebar-toggle');
+    
+    if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+        sidebar.classList.remove('active');
+    }
+    });
+    </script>   
 </body>
 
 </html>

@@ -225,14 +225,11 @@ if (!isset($pdo)) {
                     <h2>Ready to Build Your Diverse Team?</h2>
                     <p>Let's work together to create an inclusive workplace that drives innovation and success.</p>
                     <div class="banner-buttons">
-                        <a href="#contact" class="primary-btn">
+                        <a href="register.php" class="primary-btn">
                             Get Started
                             <i class="fas fa-arrow-right"></i>
                         </a>
-                        <a href="#about" class="secondary-btn">
-                            Learn More
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
+                        
                     </div>
                 </div>
                 <div class="banner-shape banner-shape-1"></div>
@@ -252,9 +249,7 @@ if (!isset($pdo)) {
                 <div class="footer-top">
                     <!-- Company Info -->
                     <div class="footer-col">
-                        <div class="footer-logo">
-                            <h3>Your Logo</h3>
-                        </div>
+                        
                         <p class="footer-desc">
                     Sector Link Solutions is a pioneering recruitment company committed to helping organisations achieve their diversity and inclusion goals.
                     </p>

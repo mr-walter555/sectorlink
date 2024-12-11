@@ -261,14 +261,11 @@ if (!isset($pdo)) {
                     <h2>Build Your Dream Team with Sector Link Solutions</h2>
                     <p>At Sector Link Solutions, we are more than just a recruitment agency—we are your partner in building a healthcare team that is committed to excellence. By providing you with access to top-tier permanent staff, we help you create a stable, high-performing workforce that delivers outstanding care.</p>
                     <div class="banner-buttons">
-                        <a href="#contact" class="primary-btn">
+                        <a href="register.php" class="primary-btn">
                             Get Started
                             <i class="fas fa-arrow-right"></i>
                         </a>
-                        <a href="#about" class="secondary-btn">
-                            Learn More
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
+                        
                     </div>
                 </div>
             </div>

@@ -262,14 +262,11 @@ if (!isset($pdo)) {
                     <h2>Partner with Us Today</h2>
                     <p>At Sector Link Solutions, we are more than just a staffing agency—we are your strategic partner in healthcare. Our goal is to provide you with the skilled professionals you need to maintain the highest standards of patient care. Let us help you build a strong, capable, and compassionate healthcare team.</p>
                     <div class="banner-buttons">
-                        <a href="#contact" class="primary-btn">
+                        <a href="register.php" class="primary-btn">
                             Get Started
                             <i class="fas fa-arrow-right"></i>
                         </a>
-                        <a href="#about" class="secondary-btn">
-                            Learn More
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
+                        
                     </div>
                 </div>
             </div>

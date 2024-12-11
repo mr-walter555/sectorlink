@@ -38,6 +38,29 @@ try {
 </head>
 
 <body>
+    <nav class="dashboard-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+            </div>
+
+            <div class="nav-actions">
+                <div class="nav-icons">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="user-icon">
+                        <i class="fas fa-user-circle"></i>
+                        <span><?php echo htmlspecialchars($_SESSION['admin_username']); ?></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
     <div class="dashboard-container">
     <div class="sidebar">
             <h2><i class="fas fa-user-shield"></i> Admin Panel</h2>
@@ -67,6 +90,12 @@ try {
                     </a>
                 </li>
                 <li>
+                    <a href="change_password.php" class="active">
+                        <i class="fas fa-key"></i>
+                        <span>Change Password</span>
+                    </a>
+                </li>
+                <li>
                     <a href="admin_logout.php">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Logout</span>
@@ -77,7 +106,6 @@ try {
         <div class="main-content">
             <div class="header">
                 <h1>Post New Job</h1>
-                <p class="subtitle">Create a new job listing for potential candidates</p>
             </div>
 
             <div class="job-form-container">
@@ -278,6 +306,26 @@ try {
 
             return false;
         }
+    </script>
+
+    <script>
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+        const dashboardNav = document.querySelector('.dashboard-nav');
+        
+        sidebar.classList.toggle('active');
+    }
+
+    // Close sidebar when clicking outside
+    document.addEventListener('click', function(event) {
+        const sidebar = document.querySelector('.sidebar');
+        const toggle = document.querySelector('.sidebar-toggle');
+        
+        if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+            sidebar.classList.remove('active');
+        }
+    });
     </script>
 
 </body>

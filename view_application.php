@@ -253,17 +253,24 @@ try {
                     <div class="cv-preview">
                         <?php 
                             $cv_path = $application['cv_path'];
-                            if (file_exists($cv_path)) {
-                                // Use PDF.js viewer for better compatibility and control
+                            // Add debugging
+                            error_log("CV Path: " . $cv_path);
+                            
+                            // Ensure the path starts with the uploads directory if it's not absolute
+                            if (!empty($cv_path) && !str_starts_with($cv_path, '/')) {
+                                $cv_path = 'uploads/' . $cv_path;
+                            }
+                            
+                            if (!empty($cv_path) && file_exists($cv_path)) {
                                 echo '<object data="' . htmlspecialchars($cv_path) . '" type="application/pdf" class="cv-frame">
                                         <p>It appears you don\'t have a PDF plugin for this browser. 
                                         You can <a href="' . htmlspecialchars($cv_path) . '" target="_blank">click here to download the PDF file</a>.</p>
                                       </object>';
                                 
-                                // Add download button
-                              
+                               
                             } else {
-                                echo "<p>CV file not found. Please contact support.</p>";
+                                echo "<p>CV file not found. Path: " . htmlspecialchars($cv_path) . "</p>";
+                                error_log("CV file not found at path: " . $cv_path);
                             }
                         ?>
                     </div>

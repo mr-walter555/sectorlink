@@ -192,7 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 All your data, including your profile, applications, and settings will be permanently deleted.
                             </p>
                         </div>
-                        <button type="button" class="btn-delete" onclick="confirmDelete()">Delete Account</button>
+                        <button type="button" class="btn-danger-delete-account" onclick="confirmDelete()">Delete Account</button>
                     </form>
                 </div>
             </div>

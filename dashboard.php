@@ -29,10 +29,36 @@ try {
     <title>User Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
     <link rel="stylesheet" href="admin_dashboard.css">
 </head>
 <body>
+    
+
+    <nav class="dashboard-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+            </div>
+
+            <div class="nav-actions">
+                <div class="nav-icons">
+                    
+                    <div class="user-icon">
+                        <?php if (!empty($user['profile_image'])): ?>
+                            <img src="<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile">
+                        <?php else: ?>
+                            <i class="fas fa-user-circle"></i>
+                        <?php endif; ?>
+                        <span><?php echo htmlspecialchars($user['fullname']); ?></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <div class="dashboard-container">
         <div class="sidebar">
             <h2><i class="fas fa-user"></i> My Dashboard</h2>
@@ -73,20 +99,7 @@ try {
         <div class="main-content">
             <div class="header">
                 <h1>My Dashboard</h1>
-                <div class="header-icons">
-                    <div class="notification-icon">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">2</span>
-                    </div>
-                    <div class="user-icon">
-                        <?php if (!empty($user['profile_image'])): ?>
-                            <img src="<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                        <?php else: ?>
-                            <i class="fas fa-user-circle"></i>
-                        <?php endif; ?>
-                        <span><?php echo htmlspecialchars($user['fullname']); ?></span>
-                    </div>
-                </div>
+                
             </div>
             <div class="stats-container">
                 <div class="stats-card">
@@ -169,5 +182,24 @@ try {
         </div>
     </div>
 
+    <script>
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+        const dashboardNav = document.querySelector('.dashboard-nav');
+        
+        sidebar.classList.toggle('active');
+    }
+
+    // Close sidebar when clicking outside
+    document.addEventListener('click', function(event) {
+        const sidebar = document.querySelector('.sidebar');
+        const toggle = document.querySelector('.sidebar-toggle');
+        
+        if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+            sidebar.classList.remove('active');
+        }
+    });
+    </script>
 </body>
 </html>

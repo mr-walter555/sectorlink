@@ -81,19 +81,19 @@
                 </div>
 
                 <div class="form-group">
+                    <small class="file-hint">Upload your CV (PDF, DOC, DOCX)</small>
                     <div class="input-with-icon">
                         <i class="fa-regular fa-file-lines"></i>
                         <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" required>
                     </div>
-                    <small class="file-hint">Upload your CV (PDF, DOC, DOCX)</small>
                 </div>
 
                 <div class="form-group">
+                    <small class="file-hint">Upload Cover Letter (Optional) - PDF, DOC, DOCX</small>
                     <div class="input-with-icon">
                         <i class="fa-regular fa-file-lines"></i>
                         <input type="file" id="cover_letter" name="cover_letter" accept=".pdf,.doc,.docx">
                     </div>
-                    <small class="file-hint">Upload Cover Letter (Optional) - PDF, DOC, DOCX</small>
                 </div>
 
                 <div class="form-group terms">

@@ -12843,7 +12843,7 @@ nav a.active {
 
 .login-left-section {
     flex: 1;
-    background: var(--primary-color);
+    background:  linear-gradient(135deg, #1a65e5, #58a056);
     position: relative;
     overflow: hidden;
     display: flex;
@@ -12948,7 +12948,7 @@ nav a.active {
 .admin-login-submit {
     width: 100%;
     padding: 1rem;
-    background: var(--primary-color);
+    background:orangered;
     color: #fff;
     border: none;
     border-radius: 0.5rem;
@@ -14702,6 +14702,44 @@ select:focus {
     right: 0;
     z-index: 2;
 }
+/* Add these media queries while keeping your existing styles unchanged */
+@media screen and (max-width: 768px) {
+    .contact-content-wrapper {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .contact-image-stack {
+        width: 100%;
+        margin-bottom: 30px;
+        min-height: 400px; /* Slightly reduced height for mobile */
+        display: block;
+    }
+
+    .main-image {
+        width: 85%;
+        margin-left: 0;
+    }
+
+    .accent-image {
+        width: 65%;
+        right: 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .contact-image-stack {
+        min-height: 350px; /* Further reduced for smaller screens */
+    }
+
+    .main-image {
+        width: 90%;
+    }
+
+    .accent-image {
+        width: 70%;
+    }
+}
 
 /* Contact Form Styles */
 .contact-form-wrapper {
@@ -14974,4 +15012,46 @@ select:focus {
     text-align: center;
     margin-top: 20px;
     font-size: 14px;
+}
+/* ... existing code ... */
+
+@media (max-width: 768px) {
+    .input-with-icon {
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    .input-with-icon input {
+        padding-left: 2.5rem; /* Maintain space for icon */
+        padding-right: 2.5rem; /* Space for any right-side icons like password toggle */
+        width: 100%;
+    }
+
+    .input-with-icon i:not(.toggle-password) {
+        position: absolute;
+        left: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+        font-size: 1rem;
+        pointer-events: none; /* Prevent icon from interfering with input */
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    /* Adjust form group spacing */
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    /* Ensure labels don't get squeezed */
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
 }

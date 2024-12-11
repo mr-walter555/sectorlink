@@ -262,14 +262,11 @@ if (!isset($pdo)) {
                     <h2>Partner with Us for Temporary Staffing Success</h2>
                     <p>At Sector Link Solutions, we're dedicated to providing healthcare providers across Ireland with the temporary staffing support they need to deliver outstanding patient care. Our goal is to help you maintain seamless operations, even in the face of staffing challenges, by providing access to a pool of skilled and dependable healthcare professionals.</p>
                     <div class="banner-buttons">
-                        <a href="#contact" class="primary-btn">
+                        <a href="register.php" class="primary-btn">
                             Get Started
                             <i class="fas fa-arrow-right"></i>
                         </a>
-                        <a href="#about" class="secondary-btn">
-                            Learn More
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
+                        
                     </div>
                 </div>
             </div>

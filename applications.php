@@ -10,6 +10,7 @@ if (!isset($_SESSION['admin_username'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +26,7 @@ if (!isset($_SESSION['admin_username'])) {
             background: #fff;
             border-radius: 10px;
             margin-top: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .search-container {
@@ -45,7 +46,7 @@ if (!isset($_SESSION['admin_username'])) {
         .search-box:focus {
             outline: none;
             border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
         }
 
         .applications-list {
@@ -116,7 +117,7 @@ if (!isset($_SESSION['admin_username'])) {
         .status-select:focus {
             outline: none;
             border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
         }
 
         .no-applications {
@@ -165,9 +166,36 @@ if (!isset($_SESSION['admin_username'])) {
         }
     </style>
 </head>
+
 <body>
+    <!-- Add this navbar section at the top of each admin page (after <body>) -->
+    <nav class="dashboard-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="admin_dashboard.php">
+                    
+                </a>
+            </div>
+
+            <div class="nav-actions">
+                <div class="nav-icons">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="user-icon">
+                        <i class="fas fa-user-circle"></i>
+                        <span><?php echo htmlspecialchars($_SESSION['admin_username']); ?></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
     <div class="dashboard-container">
-        <div class="sidebar">
+    <div class="sidebar">
             <h2><i class="fas fa-user-shield"></i> Admin Panel</h2>
             <ul class="sidebar-menu">
                 <li>
@@ -189,9 +217,15 @@ if (!isset($_SESSION['admin_username'])) {
                     </a>
                 </li>
                 <li>
-                    <a href="applications.php" class="active">
+                    <a href="applications.php">
                         <i class="fas fa-file-alt"></i>
                         <span>Applications</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="change_password.php" class="active">
+                        <i class="fas fa-key"></i>
+                        <span>Change Password</span>
                     </a>
                 </li>
                 <li>
@@ -205,16 +239,6 @@ if (!isset($_SESSION['admin_username'])) {
         <div class="main-content">
             <div class="header">
                 <h1>Applications</h1>
-                <div class="header-icons">
-                    <div class="notification-icon">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
-                    </div>
-                    <div class="user-icon">
-                        <i class="fas fa-user-circle"></i>
-                        <span><?php echo htmlspecialchars($_SESSION['admin_username']); ?></span>
-                    </div>
-                </div>
             </div>
             <div class="search-bar">
                 <input type="text" id="searchBox" placeholder="Search applications..." onkeyup="searchTable()">
@@ -223,7 +247,7 @@ if (!isset($_SESSION['admin_username'])) {
                 <div class="applications-list">
                     <?php
                     require_once 'config/database.php';
-                    
+
                     try {
                         // First get all applications
                         $applications_query = "SELECT * FROM applications ORDER BY applied_at DESC";
@@ -239,7 +263,7 @@ if (!isset($_SESSION['admin_username'])) {
                             // Only proceed with these queries if we have IDs
                             if (!empty($job_ids) && !empty($user_ids)) {
                                 // Get jobs info
-                                $jobs_query = "SELECT id, job_title, position FROM jobs WHERE id IN (" . 
+                                $jobs_query = "SELECT id, job_title, position FROM jobs WHERE id IN (" .
                                     str_repeat('?,', count($job_ids) - 1) . '?)';
                                 $jobs_stmt = $pdo->prepare($jobs_query);
                                 $jobs_stmt->execute($job_ids);
@@ -247,7 +271,7 @@ if (!isset($_SESSION['admin_username'])) {
                                 $jobs_map = array_column($jobs, null, 'id');
 
                                 // Get users info
-                                $users_query = "SELECT id, fullname FROM users WHERE id IN (" . 
+                                $users_query = "SELECT id, fullname FROM users WHERE id IN (" .
                                     str_repeat('?,', count($user_ids) - 1) . '?)';
                                 $users_stmt = $pdo->prepare($users_query);
                                 $users_stmt->execute($user_ids);
@@ -255,7 +279,7 @@ if (!isset($_SESSION['admin_username'])) {
                                 $users_map = array_column($users, null, 'id');
 
                                 // Now render the table
-                                ?>
+                    ?>
                                 <table class="applications-table" id="applicationsTable">
                                     <thead>
                                         <tr>
@@ -268,50 +292,50 @@ if (!isset($_SESSION['admin_username'])) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    <?php
-                                    foreach ($applications as $application) {
-                                        $status = empty($application['status']) ? 'pending' : $application['status'];
-                                        $status_class = strtolower($status);
-                                        $job = $jobs_map[$application['job_id']] ?? [];
-                                        $user = $users_map[$application['user_id']] ?? [];
-                                        ?>
-                                        <tr>
-                                            <td><?php echo htmlspecialchars($user['fullname'] ?? 'Unknown'); ?></td>
-                                            <td><?php echo htmlspecialchars($job['job_title'] ?? 'Unknown'); ?></td>
-                                            <td><?php echo htmlspecialchars($job['position'] ?? 'Unknown'); ?></td>
-                                            <td><?php echo date('M d, Y', strtotime($application['applied_at'])); ?></td>
-                                            <td>
-                                                <span class="status <?php echo htmlspecialchars($status_class); ?>">
-                                                    <?php echo htmlspecialchars($status); ?>
-                                                </span>
-                                            </td>
-                                            <td class="action-buttons">
-                                                <button class="btn-action btn-view" 
-                                                    onclick="window.location.href='view_application.php?id=<?php echo htmlspecialchars($application['id']); ?>'">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                                
-                                                <button class="btn-action btn-success" 
-                                                    data-id="<?php echo htmlspecialchars($application['id']); ?>"
-                                                    onclick="updateStatus('<?php echo htmlspecialchars($application['id']); ?>', 'shortlisted')"
-                                                    <?php echo $status === 'shortlisted' ? 'disabled' : ''; ?>>
-                                                    <i class="fas fa-check"></i>
-                                                </button>
-                                                
-                                                <button class="btn-action btn-delete" 
-                                                    data-id="<?php echo htmlspecialchars($application['id']); ?>"
-                                                    onclick="updateStatus('<?php echo htmlspecialchars($application['id']); ?>', 'rejected')"
-                                                    <?php echo $status === 'rejected' ? 'disabled' : ''; ?>>
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
                                         <?php
-                                    }
-                                    ?>
+                                        foreach ($applications as $application) {
+                                            $status = empty($application['status']) ? 'pending' : $application['status'];
+                                            $status_class = strtolower($status);
+                                            $job = $jobs_map[$application['job_id']] ?? [];
+                                            $user = $users_map[$application['user_id']] ?? [];
+                                        ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($user['fullname'] ?? 'Unknown'); ?></td>
+                                                <td><?php echo htmlspecialchars($job['job_title'] ?? 'Unknown'); ?></td>
+                                                <td><?php echo htmlspecialchars($job['position'] ?? 'Unknown'); ?></td>
+                                                <td><?php echo date('M d, Y', strtotime($application['applied_at'])); ?></td>
+                                                <td>
+                                                    <span class="status <?php echo htmlspecialchars($status_class); ?>">
+                                                        <?php echo htmlspecialchars($status); ?>
+                                                    </span>
+                                                </td>
+                                                <td class="action-buttons">
+                                                    <button class="btn-action btn-view"
+                                                        onclick="window.location.href='view_application.php?id=<?php echo htmlspecialchars($application['id']); ?>'">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+
+                                                    <button class="btn-action btn-success"
+                                                        data-id="<?php echo htmlspecialchars($application['id']); ?>"
+                                                        onclick="updateStatus('<?php echo htmlspecialchars($application['id']); ?>', 'shortlisted')"
+                                                        <?php echo $status === 'shortlisted' ? 'disabled' : ''; ?>>
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+
+                                                    <button class="btn-action btn-delete"
+                                                        data-id="<?php echo htmlspecialchars($application['id']); ?>"
+                                                        onclick="updateStatus('<?php echo htmlspecialchars($application['id']); ?>', 'rejected')"
+                                                        <?php echo $status === 'rejected' ? 'disabled' : ''; ?>>
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                        }
+                                        ?>
                                     </tbody>
                                 </table>
-                                <?php
+                    <?php
                             } else {
                                 echo '<div class="no-applications">
                                         <i class="fas fa-file-alt"></i>
@@ -338,86 +362,107 @@ if (!isset($_SESSION['admin_username'])) {
     </div>
 
     <script>
-    function searchTable() {
-        const input = document.getElementById('searchBox');
-        const filter = input.value.toLowerCase();
-        const table = document.getElementById('applicationsTable');
-        const rows = table.getElementsByTagName('tr');
+        function searchTable() {
+            const input = document.getElementById('searchBox');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('applicationsTable');
+            const rows = table.getElementsByTagName('tr');
 
-        for (let i = 1; i < rows.length; i++) { // Start from 1 to skip header row
-            const cells = rows[i].getElementsByTagName('td');
-            let found = false;
-            
-            for (let j = 0; j < cells.length - 1; j++) { // Skip last column (actions)
-                const cell = cells[j];
-                if (cell) {
-                    const text = cell.textContent || cell.innerText;
-                    if (text.toLowerCase().indexOf(filter) > -1) {
-                        found = true;
-                        break;
+            for (let i = 1; i < rows.length; i++) { // Start from 1 to skip header row
+                const cells = rows[i].getElementsByTagName('td');
+                let found = false;
+
+                for (let j = 0; j < cells.length - 1; j++) { // Skip last column (actions)
+                    const cell = cells[j];
+                    if (cell) {
+                        const text = cell.textContent || cell.innerText;
+                        if (text.toLowerCase().indexOf(filter) > -1) {
+                            found = true;
+                            break;
+                        }
                     }
                 }
+
+                rows[i].style.display = found ? '' : 'none';
             }
-            
-            rows[i].style.display = found ? '' : 'none';
         }
-    }
 
-    function updateStatus(applicationId, newStatus) {
-        console.log('Updating status:', applicationId, newStatus); // Debug log
+        function updateStatus(applicationId, newStatus) {
+            console.log('Updating status:', applicationId, newStatus); // Debug log
 
-        Swal.fire({
-            title: 'Are you sure?',
-            text: `Do you want to mark this application as ${newStatus}?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, update it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const formData = new FormData();
-                formData.append('application_id', applicationId);
-                formData.append('status', newStatus);
+            Swal.fire({
+                title: 'Are you sure?',
+                text: `Do you want to mark this application as ${newStatus}?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, update it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const formData = new FormData();
+                    formData.append('application_id', applicationId);
+                    formData.append('status', newStatus);
 
-                fetch('update_application_status.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Server response:', data); // Debug log
+                    fetch('update_application_status.php', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Server response:', data); // Debug log
 
-                    if (data.success) {
-                        // Update UI
-                        const row = document.querySelector(`button[data-id="${applicationId}"]`).closest('tr');
-                        const statusCell = row.querySelector('td:nth-child(5)');
-                        
-                        statusCell.innerHTML = `
+                            if (data.success) {
+                                // Update UI
+                                const row = document.querySelector(`button[data-id="${applicationId}"]`).closest('tr');
+                                const statusCell = row.querySelector('td:nth-child(5)');
+
+                                statusCell.innerHTML = `
                             <span class="status ${newStatus.toLowerCase()}">
                                 ${newStatus}
                             </span>
                         `;
 
-                        // Update button states
-                        const shortlistBtn = row.querySelector('.btn-success');
-                        const rejectBtn = row.querySelector('.btn-delete');
-                        
-                        if (shortlistBtn) shortlistBtn.disabled = (newStatus === 'shortlisted');
-                        if (rejectBtn) rejectBtn.disabled = (newStatus === 'rejected');
+                                // Update button states
+                                const shortlistBtn = row.querySelector('.btn-success');
+                                const rejectBtn = row.querySelector('.btn-delete');
 
-                        Swal.fire('Updated!', data.message, 'success');
-                    } else {
-                        Swal.fire('Error!', data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    Swal.fire('Error!', 'Failed to update status: ' + error.message, 'error');
-                });
+                                if (shortlistBtn) shortlistBtn.disabled = (newStatus === 'shortlisted');
+                                if (rejectBtn) rejectBtn.disabled = (newStatus === 'rejected');
+
+                                Swal.fire('Updated!', data.message, 'success');
+                            } else {
+                                Swal.fire('Error!', data.message, 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire('Error!', 'Failed to update status: ' + error.message, 'error');
+                        });
+                }
+            });
+        }
+    </script>
+    <!-- Add this script section at the bottom of each admin page (before </body>) -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+            const dashboardNav = document.querySelector('.dashboard-nav');
+
+            sidebar.classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside
+        document.addEventListener('click', function(event) {
+            const sidebar = document.querySelector('.sidebar');
+            const toggle = document.querySelector('.sidebar-toggle');
+
+            if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+                sidebar.classList.remove('active');
             }
         });
-    }
     </script>
 </body>
+
 </html>

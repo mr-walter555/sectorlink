@@ -49,19 +49,25 @@ try {
     $stmt = $pdo->prepare("UPDATE users SET phone = ? WHERE id = ?");
     $stmt->execute([$phone, $user_id]);
 
-    // Update user's CV path
+    // If a new CV is uploaded for this application, update the user's default CV as well
     if ($cv_path) {
         $stmt = $pdo->prepare("UPDATE users SET cv_path = ? WHERE id = ?");
         $stmt->execute([$cv_path, $user_id]);
+    } else {
+        // If no new CV uploaded, use the user's default CV for this application
+        $stmt = $pdo->prepare("SELECT cv_path FROM users WHERE id = ?");
+        $stmt->execute([$user_id]);
+        $cv_path = $stmt->fetchColumn();
     }
 
-    // Insert application
-    $stmt = $pdo->prepare("INSERT INTO applications (user_id, job_id, status, applied_at) 
-                          VALUES (?, ?, 'pending', NOW())");
+    // Insert application with CV (either newly uploaded or default from user profile)
+    $stmt = $pdo->prepare("INSERT INTO applications (user_id, job_id, status, applied_at, cv_path) 
+                          VALUES (?, ?, 'pending', NOW(), ?)");
     
     $stmt->execute([
         $user_id,
-        $job_id
+        $job_id,
+        $cv_path
     ]);
 
     // Commit transaction

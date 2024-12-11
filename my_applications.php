@@ -7,8 +7,18 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Get user data from session
-$user_name = $_SESSION['user_name'] ?? 'Guest';
+require_once 'config/database.php';
+
+// Get user data from database
+try {
+    $stmt = $pdo->prepare("SELECT fullname, profile_image FROM users WHERE id = ?");
+    $stmt->execute([$_SESSION['user_id']]);
+    $user = $stmt->fetch();
+    $user_name = $user['fullname'] ?? 'Guest';
+} catch (PDOException $e) {
+    $user_name = 'Guest';
+    $user = ['fullname' => 'Guest', 'profile_image' => ''];
+}
 ?>
 
 <!DOCTYPE html>
@@ -24,6 +34,33 @@ $user_name = $_SESSION['user_name'] ?? 'Guest';
 </head>
 
 <body>
+<nav class="dashboard-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+            </div>
+
+            <div class="nav-actions">
+                <div class="nav-icons">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                    </div>
+                    <div class="user-icon">
+                        <?php if (!empty($user['profile_image'])): ?>
+                            <img src="<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile">
+                        <?php else: ?>
+                            <i class="fas fa-user-circle"></i>
+                        <?php endif; ?>
+                        <span><?php echo htmlspecialchars($user['fullname']); ?></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
  
     <div class="dashboard-container">
         <div class="sidebar">
@@ -63,7 +100,10 @@ $user_name = $_SESSION['user_name'] ?? 'Guest';
             </ul>
         </div>
         <div class="main-content">
-            <h2>My Applications</h2>
+        <div class="header">
+                <h1>My Applications</h1>
+                
+            </div>
             <div style="text-align: right; margin-bottom: 20px;">
                 <a href="live-jobs.php" class="browse-jobs-btn">
                     <i class="fas fa-search"></i> Browse Jobs
@@ -250,6 +290,25 @@ $user_name = $_SESSION['user_name'] ?? 'Guest';
             background: #0056b3;
         }
     </style>
+      <script>
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+        const dashboardNav = document.querySelector('.dashboard-nav');
+        
+        sidebar.classList.toggle('active');
+    }
+
+    // Close sidebar when clicking outside
+    document.addEventListener('click', function(event) {
+        const sidebar = document.querySelector('.sidebar');
+        const toggle = document.querySelector('.sidebar-toggle');
+        
+        if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+            sidebar.classList.remove('active');
+        }
+    });
+    </script>
 </body>
 
 </html>
